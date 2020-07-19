@@ -12,6 +12,9 @@ const MockModule = new Mock();
 const Coinflip = require("./modules/coinflip");
 const CoinflipModule = new Coinflip();
 
+const EightBall = require("./modules/eightball");
+const EightBallModule = new EightBall();
+
 const version = "v0.1.0";
 
 const isDevMode = process.env.DEV_ENABLED;
@@ -46,6 +49,9 @@ client.on("message", msg => {
         break;
     case "coinflip":
         CoinflipModule.run(client, msg, options);
+        break;
+    case "8ball":
+        EightBallModule.run(client, msg, options);
         break;
 	}
 	
