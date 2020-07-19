@@ -1,0 +1,14 @@
+{
+	"name": "james-general-bot",
+	"version": "1.0.0",
+	"description": "A general-purpose Discord bot for the James & Watch Discord server.",
+	"main": "jamesbot.js",
+	"repository": "https://github.com/SeppahBaws/JamesGeneralBot",
+	"author": "SeppahBaws",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"discord.js": "12.2.0",
+		"dotenv": "^8.2.0"
+	}
+}
