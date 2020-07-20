@@ -16,6 +16,8 @@ const EightBall = require("./modules/eightball");
 const EightBallModule = new EightBall();
 
 const version = "v0.1.0";
+const PickRandom = require("./modules/pickRandom");
+const PickRandomModule = new PickRandom();
 
 const isDevMode = process.env.DEV_ENABLED;
 const devServer = process.env.DEV_SERVER;
@@ -53,16 +55,19 @@ client.on("message", msg => {
     case "8ball":
         EightBallModule.run(client, msg, options);
         break;
+    case "random":
+        PickRandomModule.run(client, msg, options);
+        break;
 	}
 	
-	// if (isDevMode && msg.guild.id === devServer) {
-	// 	switch (command)
-	// 	{
-	// 	case "poll":
-	// 		PollModule.run(client, msg, options);
-	// 		break;
-	// 	}
-	// }
+    if (isDevMode && msg.guild.id === devServer) {
+        switch (command)
+        {
+        // case "random":
+        //     PickRandomModule.run(client, msg, options);
+        //     break;
+        }
+    }
 });
 
 client.login(process.env.DISCORD_TOKEN);
