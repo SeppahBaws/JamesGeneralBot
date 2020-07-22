@@ -3,9 +3,12 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
+const eventTypes = require("./core/types").eventTypes;
+
 const modules = [
     require("./modules/fun"),
     require("./modules/userEmbeds"),
+    require("./modules/vineEnergy"),
 ];
 
 const version = "WIP v0.1.0";
@@ -24,6 +27,20 @@ client.on("message", msg => {
         return;
     }
 
+    // Fire off listeners
+    for (const idx in modules) {
+        if (!modules[idx].listeners) {
+            continue; // if this module doesn't have any listeners, just continue.
+        }
+
+        for (let i = 0; i < modules[idx].listeners.length; i++) {
+            if (modules[idx][modules[idx].listeners[i]].on === eventTypes.CHANNEL_MESSAGE_ADD &&  // Check if the listener type is CHANNEL_MESSAGE_ADD
+                modules[idx][modules[idx].listeners[i]].channel === msg.channel.id) {  // Check if the channel id matches
+                modules[idx][modules[idx].listeners[i]].process(client, msg);
+            }
+        }
+    }
+
     if (msg.content.charAt(0) !== "!") {
         // Not a command, skip
         return;
@@ -37,7 +54,12 @@ client.on("message", msg => {
         return;
     }
 
+    // Fire off commands
     for (const idx in modules) {
+        if (!modules[idx].commands) {
+            continue; // if this module doesn't have any commands, just continue.
+        }
+        
         for (let i = 0; i < modules[idx].commands.length; i++) {
             if (modules[idx][modules[idx].commands[i]].aliases.includes(command)) {
                 modules[idx][modules[idx].commands[i]].process(client, msg, options);
@@ -45,20 +67,15 @@ client.on("message", msg => {
             }
         }
     }
-
-    if (isDevMode && msg.guild.id === devServer) {
-        switch (command)
-        {
-        // case "random":
-        //     PickRandomModule.run(client, msg, options);
-        //     break;
-        }
-    }
 });
 
 const handleHelpCommand = (msg, options) => {
     if (options.length > 0) {
         for (const idx in modules) {
+            if (!modules[idx].commands) {
+                continue; // if this module doesn't have any commands, just continue.
+            }
+
             for (let i = 0; i < modules[idx].commands.length; i++) {
                 if (modules[idx][modules[idx].commands[i]].aliases.includes(options)) {
                     showHelp(msg, modules[idx][modules[idx].commands[i]]);
