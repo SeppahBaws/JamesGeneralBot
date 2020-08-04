@@ -7,6 +7,7 @@ const eventTypes = require("./core/types").eventTypes;
 
 const modules = [
     require("./modules/fun"),
+    require("./modules/gary"),
     require("./modules/userEmbeds"),
     require("./modules/vineEnergy"),
 ];
@@ -18,8 +19,14 @@ const devServer = process.env.DEV_SERVER;
 
 client.on("ready", () => {
     console.log(`Logged in as ${client.user.tag}`);
-    client.user.setActivity(version);
+    updateActivity();
 });
+
+const updateActivity = () => {
+    client.user.setActivity(version);
+    console.log("Updated activity!");
+    setTimeout(updateActivity, 600000);
+};
 
 client.on("message", msg => {
     if (msg.author.bot) {
@@ -63,6 +70,7 @@ client.on("message", msg => {
         for (let i = 0; i < modules[idx].commands.length; i++) {
             if (modules[idx][modules[idx].commands[i]].aliases.includes(command)) {
                 modules[idx][modules[idx].commands[i]].process(client, msg, options);
+                console.log(`${msg.author.username}#${msg.author.discriminator} used command ${command} in #${msg.channel.name}`);
                 return;
             }
         }
@@ -86,7 +94,7 @@ const handleHelpCommand = (msg, options) => {
 
         msg.reply(`The command \`${options}\` wasn't found! Type \`!help\` to see a list of commands.`);
     } else {
-        const commands = modules.map(e => e.commands).flat(Infinity);
+        const commands = modules.map(e => e.commands).filter(e => e).flat(Infinity);
         const embed = new Discord.MessageEmbed()
             .setTitle("Here's a list of all the commands:")
             .setColor("#7289DA")
