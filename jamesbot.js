@@ -10,6 +10,7 @@ const modules = [
     require("./modules/gary"),
     require("./modules/userEmbeds"),
     require("./modules/vineEnergy"),
+    require("./modules/whatToWatch"),
 ];
 
 const version = "WIP v0.1.0";
