@@ -1,7 +1,8 @@
 exports.commands = [
     "coinflip",
     "eightball",
-    "mock"
+    "mock",
+    "mock2"
 ];
 
 exports.coinflip = {
@@ -62,6 +63,31 @@ exports.mock = {
         message.channel.send(`${mocked}`)
             .then(message.channel.send("<a:jcMock:651834007171891217>")
                 .catch(console.err))
+            .catch(console.err);
+
+        message.delete()
+            .catch(console.err);
+    }
+};
+
+exports.mock2 = {
+    description: "Mock your friends for the stupid stuff they say (alternates uppercase and lowercase)",
+    usage: "!mock2 <text>",
+    aliases: ["mock2"],
+    process: (bot, message, options) => {
+        if (options.length <= 0) {
+            message.reply(`Usage: \`${this.mock.usage}\``);
+            return;
+        }
+        
+        const mocked = options.split("").map((x, i) => i % 2 == 0 ? x.toLowerCase() : x.toUpperCase()).join("");
+
+        message.channel.send(`${mocked}`)
+            .then(message.channel.send("<a:jcMock:651834007171891217>")
+                .catch(console.err))
+            .catch(console.err);
+
+        message.delete()
             .catch(console.err);
     }
 };

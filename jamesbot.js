@@ -9,11 +9,12 @@ const modules = [
     require("./modules/fun"),
     require("./modules/gary"),
     require("./modules/userEmbeds"),
-    require("./modules/vineEnergy"),
-    require("./modules/whatToWatch"),
+    require("./modules/voting"),
+    require("./modules/complaints"),
+    require("./modules/poll"),
 ];
 
-const version = "WIP v0.1.0";
+const version = "WIP v0.2.0";
 
 const isDevMode = process.env.DEV_ENABLED;
 const devServer = process.env.DEV_SERVER;
@@ -73,6 +74,34 @@ client.on("message", msg => {
                 modules[idx][modules[idx].commands[i]].process(client, msg, options);
                 console.log(`${msg.author.username}#${msg.author.discriminator} used command ${command} in #${msg.channel.name}`);
                 return;
+            }
+        }
+    }
+});
+
+client.on("messageReactionAdd", async(reaction, user) => {
+    // Don't handle reactions added by bots
+    if (user.bot) {
+        return;
+    }
+
+    if (reaction.partial) {
+        try {
+            await reaction.fetch();
+        } catch(error) {
+            console.error(error);
+            return;
+        }
+    }
+
+    for (const idx in modules) {
+        if (!modules[idx].listeners) {
+            continue;
+        }
+
+        for (let i = 0; i < modules[idx].listeners.length; i++) {
+            if (modules[idx][modules[idx].listeners[i]].on === eventTypes.MESSAGE_REACTION_ADD) {  // Check if the listener type is MESSAGE_REACTION_ADD
+                modules[idx][modules[idx].listeners[i]].process(client, reaction, user);
             }
         }
     }
