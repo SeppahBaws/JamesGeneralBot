@@ -12,6 +12,7 @@ const modules = [
     require("./modules/voting"),
     require("./modules/complaints"),
     require("./modules/poll"),
+    require("./modules/acHalloweenComp"),
 ];
 
 const version = "WIP v0.2.0";
