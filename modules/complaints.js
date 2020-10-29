@@ -7,7 +7,7 @@ exports.complaints = {
     usage: "!complaint <complaint>",
     aliases: ["complaint"],
     process: (bot, message, options) => {
-        if (message.channel.id !== "750842593486831637") {
+        if (message.channel.id !== "616746684868853819") {
             return;
         }
 
